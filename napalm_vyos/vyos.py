@@ -47,10 +47,11 @@ class VyOSDriver(NetworkDriver):
     _BACKUP_FILENAME = "/var/tmp/backup_running.conf"
     _BOOT_FILENAME = "/config/config.boot"
 
-    def __init__(self, hostname, username, password, timeout=60, optional_args=None):
+    def __init__(self, hostname, username, password=None, key_file=None, timeout=60, optional_args=None):
         self.hostname = hostname
         self.username = username
         self.password = password
+        self.key_file = key_file
         self.timeout = timeout
         self.device = None
         self._scp_client = None
@@ -65,7 +66,6 @@ class VyOSDriver(NetworkDriver):
             'verbose': False,
             'global_delay_factor': 1,
             'use_keys': False,
-            'key_file': None,
             'ssh_strict': False,
             'system_host_keys': False,
             'alt_host_keys': False,
@@ -97,6 +97,7 @@ class VyOSDriver(NetworkDriver):
                                      host=self.hostname,
                                      username=self.username,
                                      password=self.password,
+                                     key_file=self.key_file,
                                      **self.netmiko_optional_args)
 
         try:
